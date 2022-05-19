@@ -1,15 +1,17 @@
 'use strict'
 const Pet = require('../models/pet');
 const mongoose = require('mongoose');
+const pet = require('../models/pet');
 
 
- exports.largestSpecies = function(req, res) {
+ exports.largestSpecies = async function() {
     let arrSpecies = [];
     let arrSpeciesCount = [];
     let objSpecies = {};
     let specieWinner = "";
-     Pet.find({}, (err, pets) => {
-         arrSpecies = pets.map(pet => pet.species); //get all species in array
+    const pet = await Pet.find({});
+    // Pet.find({}, (err, pets) => {
+          arrSpecies = pet.map(pet => pet.species); //get all species in array
     //get values of species no repeted:
     for(let i = 0; i < arrSpecies.length; i++) {
         //add species to array arrSpecies:
@@ -40,8 +42,5 @@ const mongoose = require('mongoose');
         Specie: specieWinner,
         Count: max
     }
-    console.log(dataResult);
     return dataResult;
-}); 
-
 }
