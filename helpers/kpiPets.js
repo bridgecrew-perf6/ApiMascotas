@@ -1,9 +1,5 @@
 'use strict'
 const Pet = require('../models/pet');
-const mongoose = require('mongoose');
-const pet = require('../models/pet');
-const { ConditionalNodeDependencies } = require('mathjs');
-
 
  exports.largestSpecies = async function() {
     let objSpecies = {};
@@ -38,8 +34,6 @@ exports.averageAge = async function(specie) {
     let count = 0;
     let result = 0;
 
-
-    //mongodb query group by species get max
     await Pet.aggregate([
         {
             $group: {
@@ -49,8 +43,6 @@ exports.averageAge = async function(specie) {
             }
         }
     ]).then(function(data) {
-       //save in objSpecies max count of species
-       console.log(data);
          data.forEach(function(item) {
             if(item._id == specie){
                 averageAge = item.averageAge;
@@ -59,7 +51,7 @@ exports.averageAge = async function(specie) {
         });
         result = averageAge;
     });
-    //build object 
+ 
     const dataResult = {
         specie: specie,
         averageAge: result,
@@ -78,13 +70,11 @@ exports.standardAgeDeviation = async function(specie) {
             $group: {
                 _id: "$species",
                 count: { $sum: 1 },
-                stdDevSamp: { $stdDevSamp: "$age" }
+                stdDevSamp: { $stdDevSamp: "$age" } //desviation
             }
         }
     ]).then(function(data) {
-        console.log(data);
-        
-        //desviation:
+
         data.forEach(function(item) {
             if(item._id == specie){
                 count = item.count;
@@ -92,7 +82,7 @@ exports.standardAgeDeviation = async function(specie) {
             }
         });
      });
-    //build object
+
     const dataResult = {
         specie: specie,
         standardAgeDeviation: result,
