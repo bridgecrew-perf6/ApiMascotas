@@ -119,6 +119,38 @@ async function largestSpecies2 (req, res) {
     }
 }
 
+async function averageAge (req, res) {
+    const specie = req.params.specie;
+    try{
+    let averageAge = {};
+    averageAge = await kpiPets.averageAge(specie);
+    if(averageAge) {
+        res.status(200).send({ averageAge });
+    } else {
+        res.status(404).send({ message: "Average age not found" });
+    }
+    } catch(err) {
+        res.status(500).send({ message: "Server error" });
+    }
+}
+
+async function standardAgeDeviation (req, res) {
+    const specie = req.params.specie;
+    try{
+    let standardAgeDeviation = {};
+    standardAgeDeviation = await kpiPets.standardAgeDeviation(specie);
+    if(standardAgeDeviation) {
+        res.status(200).send({ standardAgeDeviation });
+    } else {
+        res.status(404).send({ message: "Standard age deviation not found" });
+    }
+    } catch(err) {
+        res.status(500).send({ message: "Server error" });
+    }
+}
+
+
+
 
 
 
@@ -129,6 +161,8 @@ module.exports = {
     updatePet,
     deletePet,
     largestSpecies2,
+    averageAge,
+    standardAgeDeviation,
 
 }
 
