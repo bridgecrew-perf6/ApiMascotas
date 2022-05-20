@@ -15,7 +15,7 @@ const pet = require('../models/pet');
 
 
 //controller create pet:
-function createPet(req, res) {
+async function createPet(req, res) {
     const pet = new Pet({
         name: req.body.name,
         species: req.body.species,
@@ -37,9 +37,9 @@ function createPet(req, res) {
     });
 }
 
-function getPet(req, res) {
+async function getPet(req, res) {
     const petId = req.params.id;
-    pet.findById(petId, (err, pet) => {
+     pet.findById(await petId, (err, pet) => {
         if (err) {
             res.status(500).send({ message: "Server error" });
         } else {
@@ -52,7 +52,7 @@ function getPet(req, res) {
     });
 }
 
-function getPets(req, res) {
+async function getPets(req, res) {
     pet.find({}, (err, pets) => {
         if (err) {
             res.status(500).send({ message: "Server error" });
