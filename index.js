@@ -8,7 +8,7 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 const server = process.env.SERVER || 'localhost';
 
-mongoose.connect( server, { useNewUrlParser: true }, (err, res) => {
+mongoose.connect( 'mongodb+srv://admin:mongoadmin@cluster0.h04ha.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true }, (err, res) => {
 try{
 
   if (err) {
