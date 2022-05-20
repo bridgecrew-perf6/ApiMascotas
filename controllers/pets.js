@@ -72,7 +72,7 @@ function updatePet(req, res) {
             if (!petUpdated) {
                 res.status(404).send({ message: "Pet not found" });
             } else {
-                res.status(200).send({ pet: petUpdated });
+                res.status(200).send({ message: "Pet updated" });
             }
         }
     });
