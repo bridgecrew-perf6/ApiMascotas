@@ -2,13 +2,9 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-
 const app = express();
 
 const pets_routes = require('./routes/pets');
-
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -24,7 +20,5 @@ app.use((req, res, next) => {
 
 // basic routes
 app.use('/api', pets_routes);
-
-
 
 module.exports = app;
