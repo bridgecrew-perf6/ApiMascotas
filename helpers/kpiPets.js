@@ -1,47 +1,34 @@
 'use strict'
 const Pet = require('../models/pet');
 const mongoose = require('mongoose');
+const pet = require('../models/pet');
+const { ConditionalNodeDependencies } = require('mathjs');
 
 
- exports.largestSpecies = function(req, res) {
-    let arrSpecies = [];
-    let arrSpeciesCount = [];
+ exports.largestSpecies = async function() {
     let objSpecies = {};
     let specieWinner = "";
-     Pet.find({}, (err, pets) => {
-         arrSpecies = pets.map(pet => pet.species); //get all species in array
-    //get values of species no repeted:
-    for(let i = 0; i < arrSpecies.length; i++) {
-        //add species to array arrSpecies:
-        if(arrSpecies) {
-            arrSpeciesCount.push(arrSpecies[i]);
-        }
-    }  
-    //count number of diferent species in array:   
-    for(let i = 0; i < arrSpeciesCount.length; i++) {
-        let count = 0;
-        for(let j = 0; j < arrSpecies.length; j++) {
-            if(arrSpecies[j] === arrSpeciesCount[i]) {
-                count++;
+
+    //mongodb query group by species get max
+    await Pet.aggregate([
+        {
+            $group: {
+                _id: "$species",
+                count: { $sum: 1 }
             }
         }
-        objSpecies[arrSpeciesCount[i]] = count;
-    }
-    //find max value of object:
-    let max = 0;
-    for(const [key, value] of Object.entries(objSpecies)) {
-        if(value > max) {
-            max = value;
-            specieWinner = key;
-        }
-    }
-
+    ]).then(function(data) {
+       //save in objSpecies max count of species
+         data.forEach(function(item) {
+            objSpecies[item._id] = item.count;
+        });
+        //get item of objSpecies with max value:
+        specieWinner = Object.keys(objSpecies).reduce((a, b) => objSpecies[a] > objSpecies[b] ? a : b);
+    });
+    //build object 
     const dataResult = {
         Specie: specieWinner,
-        Count: max
+        Count: objSpecies[specieWinner]
     }
-    console.log(dataResult);
     return dataResult;
-}); 
-
 }
