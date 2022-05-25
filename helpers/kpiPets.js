@@ -90,3 +90,11 @@ exports.standardAgeDeviation = async function(specie) {
     }
     return dataResult;
 }
+
+exports.calculateAge = async function(fecha) {
+    var today = new Date();
+    var birthday = new Date(fecha);
+    var age = today.getFullYear() - birthday.getFullYear();
+
+    return age;
+}

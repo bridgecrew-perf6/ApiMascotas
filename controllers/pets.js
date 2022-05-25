@@ -10,10 +10,13 @@ async function createPet(req, res) {
         name: req.body.name,
         species: req.body.species,
         gender: req.body.gender,
-        age: req.body.age,
         dateBorn: req.body.dateBorn,
     });
 
+    // get age by dateBorn:
+    const age = await kpiPets.calculateAge(pet.dateBorn);
+    pet.age = age;
+    
     pet.save((err, petStored) => {
         if (err) {
             res.status(500).send({ message: "Server error" });
